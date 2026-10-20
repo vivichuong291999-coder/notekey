@@ -15,12 +15,12 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.13'
+        python-version: '3.12' # Hạ từ 3.13 xuống 3.12 để đảm bảo tương thích tốt nhất với Flet 0.25.2
 
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.19.6'
+        flutter-version: '3.24.5' # Thay thế bản 3.47.7 (không tồn tại) bằng một phiên bản stable hợp lệ
         channel: 'stable'
 
     - name: Install Flet CLI
@@ -30,14 +30,10 @@ jobs:
 
     - name: Build APK
       run: |
-        flet pack main.py --product "Quick Note" --copyright "Copyright"
-        cd build
-        # Hoặc build trực tiếp từ file gốc
-        cd ..
         flet build apk
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
         name: app-apk
-        path: build/app/outputs/flutter-apk/app-release.apk
+        path: build/apk/*.apk # Sử dụng dấu * để tự động lấy bất kỳ file .apk nào được tạo ra, tránh lỗi sai tên
