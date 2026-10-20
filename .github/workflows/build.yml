@@ -29,17 +29,23 @@ jobs:
         flutter-version: '3.24.5'
         channel: 'stable'
 
-    - name: Install Linux Dependencies
+    - name: Configure Flutter & Accept Licenses
       run: |
-        sudo apt-get update
-        sudo apt-get install -y libgtk-3-dev
+        # Tắt các nền tảng không cần thiết để tránh lỗi thiếu thư viện trên Ubuntu
+        flutter config --no-enable-linux-desktop
+        flutter config --no-enable-web
+        flutter config --no-enable-windows-desktop
+        flutter config --no-enable-macos-desktop
+        
+        # Tự động đồng ý toàn bộ giấy phép Android SDK
+        yes | flutter doctor --android-licenses
+        
+        # Chạy kiểm tra lại để đảm bảo không còn lỗi đỏ (X)
+        flutter doctor -v
 
-    - name: Accept Android Licenses
-      run: yes | flutter doctor --android-licenses
-
-    - name: Install Flet CLI
+    - name: Install Flet
       run: |
-        pip install --upgrade pip
+        python -m pip install --upgrade pip
         pip install flet==0.25.2
 
     - name: Build APK
