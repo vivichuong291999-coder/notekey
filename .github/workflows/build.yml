@@ -31,19 +31,16 @@ jobs:
 
     - name: Configure Flutter & Accept Licenses
       run: |
-        # Tắt các nền tảng không cần thiết để tránh lỗi thiếu thư viện trên Ubuntu
+        sudo apt-get update
+        sudo apt-get install -y libgtk-3-dev
         flutter config --no-enable-linux-desktop
         flutter config --no-enable-web
         flutter config --no-enable-windows-desktop
         flutter config --no-enable-macos-desktop
-        
-        # Tự động đồng ý toàn bộ giấy phép Android SDK
         yes | flutter doctor --android-licenses
-        
-        # Chạy kiểm tra lại để đảm bảo không còn lỗi đỏ (X)
         flutter doctor -v
 
-    - name: Install Flet
+    - name: Install Flet CLI
       run: |
         python -m pip install --upgrade pip
         pip install flet==0.25.2
